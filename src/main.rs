@@ -7,7 +7,7 @@ mod cli;
 mod fs;
 
 use cli::{FigArgs, FigCommands};
-use fs::FigData;
+use fs::{FigData, FigSaveType};
 
 const APP_NAME: &'static str = "fig";
 
@@ -36,7 +36,14 @@ fn get_amt(of: &str, amt: Option<f64>, r: &mut DefaultEditor) -> f64 {
     }
 }
 
-fn set_balance(mut bal: Currency, amt: Currency, mut data: FigData, text: &str, sub: bool) {
+fn set_balance(
+    mut bal: Currency,
+    amt: Currency,
+    mut data: FigData,
+    text: &str,
+    sub: bool,
+    save_type: FigSaveType,
+) {
     if amt.value() == 0.0 {
         print_amount(text, amt);
         print_amount("Balance", bal);
@@ -45,7 +52,7 @@ fn set_balance(mut bal: Currency, amt: Currency, mut data: FigData, text: &str, 
     bal = bal.add(amt.value() * if sub { -1.0 } else { 1.0 });
     data.balance(bal.value());
     data.add_transaction(sub, amt.value());
-    fs::store_data(data);
+    fs::store_data(data, save_type);
     print_amount(text, amt);
     print_amount("Balance", bal);
 }
@@ -56,15 +63,16 @@ fn main() {
     let args = FigArgs::parse();
     let opt = config.get_opts();
     let bal = Currency::new_float(data.get_balance(), Some(opt.clone()));
+    let save_type = config.save_type();
     if let Some(command) = args.command {
         match command {
             FigCommands::Add { amount } => {
                 let amt = Currency::new_float(get_amt("add", amount, &mut r), Some(opt.clone()));
-                set_balance(bal, amt, data, "Adding", false)
+                set_balance(bal, amt, data, "Adding", false, save_type)
             }
             FigCommands::Take { amount } => {
                 let amt = Currency::new_float(get_amt("take", amount, &mut r), Some(opt.clone()));
-                set_balance(bal, amt, data, "Taking", true)
+                set_balance(bal, amt, data, "Taking", true, save_type)
             }
             FigCommands::Log => {
                 //pager::Pager::new().setup();
@@ -74,16 +82,17 @@ fn main() {
                     return;
                 }
                 for (idx, transaction) in data.get_transactions().iter().enumerate() {
-                    let cur = Currency::new_float(transaction.1, Some(opt.clone()));
+                    let cur = Currency::new_float(*transaction.1, Some(opt.clone()));
+                    let char = config.get_character();
                     println!(
                         "{}. {}, {}: {}",
                         idx + 1,
-                        if transaction.0 {
+                        if *transaction.0 {
                             bal = bal.add(cur.value() * -1.0);
-                            format!("{} {}", "⬇", cur.format()).bright_red().bold()
+                            format!("{} {}", char.1, cur.format()).bright_red().bold()
                         } else {
                             bal = bal.add(cur.value());
-                            format!("{} {}", "⬆", cur.format()).bright_green().bold()
+                            format!("{} {}", char.0, cur.format()).bright_green().bold()
                         },
                         "Balance".bright_blue().bold(),
                         bal.format().bright_yellow().bold(),
