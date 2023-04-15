@@ -1,4 +1,4 @@
-use currency_rs::CurrencyOpts;
+use currency_rs_isotoxal::CurrencyOpts;
 use serde::{Deserialize, Serialize};
 
 use std::{env, fs, path::PathBuf};

@@ -132,9 +132,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "currency_rs"
+name = "currency_rs_isotoxal"
 version = "1.1.3"
-source = "git+https://github.com/IsotoxalDev/currency_rs#6249c9856a944b6dc237f91a2afcd468dc1ebd21"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "018a627afce7624f63a53894652425b0706c7d82be822de310ef769f545a452b"
 dependencies = [
  "fancy-regex",
 ]
@@ -219,13 +220,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "fig"
+name = "fig_cli"
 version = "0.1.0"
 dependencies = [
  "bincode",
  "clap",
  "colored",
- "currency_rs",
+ "currency_rs_isotoxal",
  "rustyline",
  "serde",
  "serde-xml-rs",

@@ -1,15 +1,22 @@
 [package]
-name = "fig"
+name = "fig_cli"
 version = "0.1.0"
 edition = "2021"
+authors = ["IsotoxalDev"]
+license = "MIT"
+description = "fig is a cli finance tracker"
+repository = "https://github.com/IsotoxalDev/memtech"
+keywords = ["CLI", "Finance", "Productivity", "Budget", "Money"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "fig"
+path = "src/main.rs"
 
 [dependencies]
 bincode = "1.3.3"
 clap = { version = "3.2", features = ["derive"] }
 colored = "2.0.0"
-currency_rs = { git = "https://github.com/IsotoxalDev/currency_rs" }
+currency_rs_isotoxal = "1.1.3"
 rustyline = "11.0.0"
 serde = { version = "1.0.160", features = ["derive"] }
 serde-xml-rs = "0.6.0"

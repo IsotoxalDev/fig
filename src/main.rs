@@ -1,6 +1,6 @@
 use clap::Parser;
 use colored::*;
-use currency_rs::Currency;
+use currency_rs_isotoxal::Currency;
 use rustyline::DefaultEditor;
 
 mod cli;
