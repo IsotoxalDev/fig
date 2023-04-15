@@ -7,6 +7,10 @@ pub enum FigCommands {
         #[clap(value_parser)]
         /// The amount to add
         amount: Option<f64>,
+
+        #[clap(short, long, value_parser)]
+        /// A message for the added amount
+        message: Option<String>,
     },
 
     /// Record the taking of money
@@ -14,6 +18,10 @@ pub enum FigCommands {
         #[clap(value_parser)]
         /// The amount to add
         amount: Option<f64>,
+
+        #[clap(short, long, value_parser)]
+        /// A message for the added amount
+        message: Option<String>,
     },
 
     /// Shows a log of all transactions

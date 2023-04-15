@@ -12,6 +12,7 @@ pub struct FigData {
     current_balance: f64,
     sub: Vec<bool>,
     amt: Vec<f64>,
+    msg: Vec<Option<String>>,
 }
 
 impl FigData {
@@ -21,12 +22,18 @@ impl FigData {
     pub fn balance(&mut self, new: f64) {
         self.current_balance = new
     }
-    pub fn get_transactions(&self) -> Vec<(&bool, &f64)> {
-        self.sub.iter().zip(self.amt.iter()).collect()
+    pub fn get_transactions(&self) -> Vec<(bool, f64, Option<&String>)> {
+        self.sub
+            .iter()
+            .zip(self.amt.iter())
+            .zip(self.msg.iter())
+            .map(|((&x, &y), z)| (x, y, z.as_ref()))
+            .collect()
     }
-    pub fn add_transaction(&mut self, sub: bool, amt: f64) {
+    pub fn add_transaction(&mut self, sub: bool, amt: f64, msg: Option<String>) {
         self.sub.push(sub);
         self.amt.push(amt);
+        self.msg.push(msg);
     }
 }
 
@@ -164,6 +171,7 @@ pub fn get_data(save_type: FigSaveType) -> FigData {
                             current_balance: 0.0,
                             sub: vec![],
                             amt: vec![],
+                            msg: vec![],
                         }
                     } else {
                         panic!("Couldn't decode data")
@@ -220,6 +228,7 @@ pub fn set_fs() -> (FigData, FigConfig) {
             current_balance: 0.0,
             sub: vec![],
             amt: vec![],
+            msg: vec![],
         };
         store_data(data, file_type)
     }
