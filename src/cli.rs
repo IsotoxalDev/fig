@@ -20,7 +20,7 @@ pub enum FigCommands {
         amount: Option<f64>,
 
         #[clap(short, long, value_parser)]
-        /// A message for the added amount
+        /// A message for the taken amount
         message: Option<String>,
     },
 
