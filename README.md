@@ -32,7 +32,7 @@ fig log
 ## Installation
 using cargo
 ```sh
-cargo install fig-cli
+cargo install fig_cli
 ```
 
 or you getting binaries from releases
